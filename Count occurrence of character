@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+// To execute C, please define "int main()"
+
+// Function that return count of the given
+// character in the string
+int count(char s[], char c)
+{
+    // Count variable
+    int res = 0;
+ 
+    for (int i=0;i<strlen(s);i++)
+ 
+        // checking character in string
+        if (s[i] == c)
+            res++;
+ 
+    return res;
+}
+ 
+// Driver code
+int main()
+{
+    char str[]= "geeksforgeeks";
+    char c = 'e';
+    int res = count(str, c);
+    printf("%d",res);
+    return 0;
+}
