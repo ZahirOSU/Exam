@@ -1,0 +1,39 @@
+int cmp(const void *a, const void *b)
+{
+    int **a1 = (int **)a;
+    int **b1 = (int **)b;
+    
+    if (a1[0][0] != b1[0][0]) {
+        return a1[0][0] - b1[0][0];
+    } else {
+        return a1[0][1] - b1[0][1];
+    }
+}
+
+int** merge(int** intervals, int intervalsSize, int* intervalsColSize, int* returnSize, int** returnColumnSizes){
+    qsort(intervals, intervalsSize, sizeof(intervals[0]), cmp);
+    int **ret = (int **)malloc(sizeof(int *) * 10000);
+    *returnColumnSizes = (int *)malloc(sizeof(int) * 10000);
+    
+    ret[0] = (int *)malloc(sizeof(int) * 2);
+    ret[0][0] = intervals[0][0];
+    ret[0][1] = intervals[0][1];
+    (*returnColumnSizes)[0] = 2;
+    int count = 1;
+    for (int i=1; i<intervalsSize; i++) {
+        if (ret[count-1][1] < intervals[i][0]) {
+            ret[count] = (int *)malloc(sizeof(int) * 2);
+            ret[count][0] = intervals[i][0];
+            ret[count][1] = intervals[i][1];
+            (*returnColumnSizes)[count] = 2;
+            count++;
+        } else if (ret[count-1][1] >= intervals[i][0]) {
+            if (ret[count-1][1] < intervals[i][1]) {
+                ret[count-1][1] = intervals[i][1];
+            } 
+        }
+    }
+    
+    *returnSize = count;
+    return ret;
+}
