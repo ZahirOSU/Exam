@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+  int* oddNumbers(int l, int r) {
+  int size = ((r - l) / 2) + 1;
+  int *a = malloc(size * sizeof(int));
+  int p = 0;
+  int tmp = l % 2 == 0 ? l + 1 : l;            
+  for (int i = tmp; i < r; i += 2)
+            {
+               a[p] = i;
+                p++;
+    
+  }  
+    return a; 
+
+}
+
+int main(){
+    int *s;
+    
+     
+    s = oddNumbers(2, 9);
+  
+  printf("%d", *(s+3));
+    
+    
+}
