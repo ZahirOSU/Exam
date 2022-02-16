@@ -1,0 +1,20 @@
+typedef struct {
+    int n;
+    int *nums;
+} SparseVector;
+
+SparseVector* sparseVectorCreate(int* nums, int numsSize) {
+    SparseVector* obj = malloc(sizeof(obj[0]));
+    obj->n = numsSize;
+    obj->nums = nums;
+    return obj;
+}
+
+// Return the dotProduct of two sparse vectors
+int sparseVectordotProduct(SparseVector* obj, SparseVector* vec) {
+    int i, rtn;
+    for(i=rtn=0;i<obj->n;++i) {
+        rtn += obj->nums[i] * vec->nums[i];
+    }
+    return rtn;
+}
