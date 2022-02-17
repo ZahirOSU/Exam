@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
+
 struct node
 {
 int data_element;
 struct node *left, *right;
 };
+
 struct node *new_node(int data_element)
 {
 struct node *temp = (struct node *)malloc(sizeof(struct node)); // Allocating memory to the node
@@ -12,16 +14,28 @@ temp->data_element = data_element;
 temp->left = temp->right = NULL;
 return temp;
 }
-void display(struct node *root) // A function for the inroder traversal of the binary tree
+
+// A function for the inroder traversal of the binary tree
+void display(struct node *root) 
 {
 if (root != NULL)
 {
-display(root->left);
+display(root->left); /* first recur on left child */
 printf("%d \n", root->data_element);
 display(root->right);
 }
 }
-struct node* insert(struct node* node, int data_element) // Function to insert a new node
+// Preorder traversal
+printf("%d \n", root->data_element);  /* first print data of node */
+display(root->left);
+display(root->right);
+// Postorder traversal
+display(root->left)
+display(root->right)
+printf("%d \n", root->data_element);
+
+ // Function to insert a new node
+struct node* insert(struct node* node, int data_element)
 {
 if (node == NULL) return new_node(data_element); // Return a new node if the tree if empty
 if (data_element < node->data_element)
@@ -34,17 +48,290 @@ node->right = insert(node->right, data_element);
 }
 return node;
 }
+
+//* Given a non-empty binary search    tree, return the node    with minimum key value found in    that tree. Note that the    entire tree does not need to be searched. */
+struct node* minValueNode(struct node* node)
+{
+    struct node* current = node;
+     /* loop down to find the leftmost leaf */
+    while (current && current->left != NULL)
+        current = current->left;
+     return current;
+}
+
+//* Given a binary search tree    and a key, this function    deletes the key and    returns the new root */
+struct node* deleteNode(struct node* root, int key)
+{
+    // base case
+    if (root == NULL)
+        return root;
+ 
+    // If the key to be deleted     // is smaller than the root's     // key, then it lies in left subtree
+    if (key < root->key)
+        root->left = deleteNode(root->left, key);
+ 
+    // If the key to be deleted     // is greater than the root's     // key, then it lies in right subtree
+    else if (key > root->key)
+        root->right = deleteNode(root->right, key);
+ 
+    // if key is same as root's key,     // then This is the node     // to be deleted
+    else {
+        // node with only one child or no child
+        if (root->left == NULL) {
+            struct node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL) {
+            struct node* temp = root->left;
+            free(root);
+            return temp;
+        }
+ 
+        // node with two children:         // Get the inorder successor         // (smallest in the right subtree)
+        struct node* temp = minValueNode(root->right);
+ 
+        // Copy the inorder         // successor's content to this node
+        root->key = temp->key;
+ 
+        // Delete the inorder successor
+        root->right = deleteNode(root->right, temp->key);
+    }
+    return root;
+}
+Example: root = deleteNode(root, 20);
+
+
+//* Compute the "maxDepth" of a tree -- the number of  nodes along the longest path from the root node     down to the farthest leaf node.*/
+/* Compute the "height" of a tree -- the number of     nodes along the longest path from the root node     down to the farthest leaf node.*/
+int height(struct node* node)
+{
+    if (node == NULL)
+        return 0;
+    else {
+        /* compute the height of each subtree */
+        int lheight = height(node->left);
+        int rheight = height(node->right);
+ 
+        /* use the larger one */
+        if (lheight > rheight)
+            return (lheight + 1);
+        else
+            return (rheight + 1);
+    }
+}
+
+// Level Order Binary Tree Traversal // we will use prevoiuse function of  height(struct node* node)
+/* Function to print level order traversal a tree*/
+void printLevelOrder(struct node* root)
+{
+    int h = height(root);
+    int i;
+    for (i = 1; i <= h; i++)
+        printCurrentLevel(root, i);
+}
+ 
+/* Print nodes at a current level */
+void printCurrentLevel(struct node* root, int level)
+{
+    if (root == NULL)
+        return;
+    if (level == 1)
+        printf("%d ", root->data);
+    else if (level > 1) {
+        printCurrentLevel(root->left, level - 1);
+        printCurrentLevel(root->right, level - 1);
+    }
+}
+Example: printLevelOrder(root);
+
+
+// Recursive function to print right view of a binary tree.
+// Given a Binary Tree, print Right view of it. Right view of a Binary Tree is set of nodes visible when tree is visited from Right side. 
+void rightViewUtil(struct Node *root, int level, int *max_level)
+{
+    // Base Case
+    if (root==NULL)  return;
+ 
+    // If this is the last Node of its level
+    if (*max_level < level)
+    {
+        printf("%d\t", root->data);
+        *max_level = level;
+    }
+ 
+    // Recur for right subtree first, then left subtree
+    rightViewUtil(root->right, level+1, max_level);
+    rightViewUtil(root->left, level+1, max_level);
+}
+
+//invert a binary tree miror
+void invert(struct Node* node) 
+{ 
+	if (node == NULL) 
+		return; 
+	
+		struct Node* temp; 
+				/* recursive calls */ Call invert for left-subtree /  Call invert for right-subtree.
+		invert(node->left); 
+		invert(node->right); 
+	
+		/* swap the pointers in this node */
+		temp	 = node->left; 
+		node->left = node->right; 
+		node->right = temp; 
+	} 
+
+// Maximum Path Sum in a Binary Tree
+// This function returns overall maximum path sum in 'res' // And returns max path sum going through root.
+int findMaxUtil(Node* root, int &res)
+{
+    //Base Case
+    if (root == NULL)
+        return 0;
+ 
+    // l and r store maximum path sum going through left and     // right child of root respectively
+    int l = findMaxUtil(root->left,res);
+    int r = findMaxUtil(root->right,res);
+ 
+    // Max path for parent call of root. This path must     // include at-most one child of root
+    int max_single = max(max(l, r) + root->data, root->data);
+ 
+    // Max Top represents the sum when the Node under     // consideration is the root of the maxsum path and no     // ancestors of root are there in max sum path
+    int max_top = max(max_single, l + r + root->data);
+     res = max(res, max_top); // Store the Maximum Result.
+     return max_single;
+}
+
+//Sum of nodes in a Binary Search Tree with values from a given range
+// Function to perform level order // traversal on the Tree and // calculate the required sum
+// Approach: The given problem can be solved by performing any Tree Traversal and calculating the sum of nodes which are lying in the range [L, R].
+int rangeSumBST(Node* root, int low, int high)
+{
+    // Base Case
+    if (root == NULL)
+        return 0;
+ 
+    // Stores the nodes while     // performing level order traversal
+    queue<Node*> q;
+     // Push the root node   // into the queue
+    q.push(root);
+     // Iterate until queue is empty
+    while (q.empty() == false) {
+ 
+        // Stores the front         // node of the queue
+        Node* curr = q.front();
+        q.pop();
+         // If the value of the node         // lies in the given range
+        if (curr->val >= low
+            && curr->val <= high) {
+             // Add it to sum
+            sum += curr->val;
+        }
+ 
+        // If the left child is         // not NULL and exceeds low
+        if (curr->left != NULL
+            && curr->val > low)
+ 
+            // Insert into queue
+            q.push(curr->left);
+ 
+        // If the right child is not         // NULL and exceeds low
+        if (curr->right != NULL
+            && curr->val < high)
+ 
+            // Insert into queue
+            q.push(curr->right);
+    }
+ 
+    // Return the resultant sum
+    return sum;
+}
+Example: int L = 7, R = 15;  printf("%d", rangeSumBST(root, L, R));
+
+// function to print the zigzag traversal
+void zizagtraversal(struct Node* root)
+{
+    // if null then return
+    if (!root)
+        return;
+ 
+    // declare two stacks
+    stack<struct Node*> currentlevel;
+    stack<struct Node*> nextlevel;
+ 
+    // push the root
+    currentlevel.push(root);
+ 
+    // check if stack is empty  
+    bool lefttoright = true;
+    while (!currentlevel.empty()) {
+ 
+        // pop out of stack
+        struct Node* temp = currentlevel.top();
+        currentlevel.pop();
+ 
+        // if not null
+        if (temp) {
+ 
+            // print the data in it
+            cout << temp->data << " ";
+ 
+            // store data according to current
+            // order.
+            if (lefttoright) {
+                if (temp->left)
+                    nextlevel.push(temp->left);
+                if (temp->right)
+                    nextlevel.push(temp->right);
+            }
+            else {
+                if (temp->right)
+                    nextlevel.push(temp->right);
+                if (temp->left)
+                    nextlevel.push(temp->left);
+            }
+        }
+ 
+        if (currentlevel.empty()) {
+            lefttoright = !lefttoright;
+            swap(currentlevel, nextlevel);
+        }
+    }
+}
+ 
+
+
 int main()
 {
-printf("Welcome to DataFlair tutorials!\n\n");
-struct node *root = NULL;
-root = insert(root, 10);
-insert(root, 20);
-insert(root, 30);
-insert(root, 40);
-insert(root, 50);
-insert(root, 60);
-insert(root, 70);
+
+/* Let us create following BST
+              50
+           /     \
+          30      70
+         /  \    /  \
+       20   40  60   80 */
+    struct node* root = NULL;
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 70);
+    root = insert(root, 60);
+    root = insert(root, 80);
 display(root); // Function to display the binary tree elements
+
+/* Let us create following BST
+              1
+           /     \
+          2      3
+         /  \  
+        4   5    
+struct node* root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+
 return 0;
 }
