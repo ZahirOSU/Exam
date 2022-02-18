@@ -148,6 +148,8 @@ Example: printLevelOrder(root);
 
 // Recursive function to print right view of a binary tree.
 // Given a Binary Tree, print Right view of it. Right view of a Binary Tree is set of nodes visible when tree is visited from Right side. 
+The problem can be solved using simple recursive traversal. We can keep track of level of a node by passing a parameter to all recursive calls. 
+The idea is to keep track of maximum level also.
 void rightViewUtil(struct Node *root, int level, int *max_level)
 {
     // Base Case
