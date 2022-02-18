@@ -254,6 +254,13 @@ int rangeSumBST(Node* root, int low, int high)
 Example: int L = 7, R = 15;  printf("%d", rangeSumBST(root, L, R));
 
 // function to print the zigzag traversal
+This problem can be solved using two stacks. Assume the two stacks are current: currentlevel and nextlevel. We would
+also need a variable to keep track of the current level order(whether it is left to right or right to left). We pop from the
+currentlevel stack and print the nodes value. Whenever the current level order is from left to right, push the nodes left
+child, then its right child to the stack nextlevel. Since a stack is a LIFO(Last-In-First_out) structure, next time when nodes
+are popped off nextlevel, it will be in the reverse order. On the other hand, when the current level order is from right to left,
+we would push the nodes right child first, then its left child. Finally, do-not forget to swap those two stacks at the end of
+each level(i.e., when current level is empty) 
 void zizagtraversal(struct Node* root)
 {
     // if null then return
