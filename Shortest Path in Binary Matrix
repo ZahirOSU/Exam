@@ -1,3 +1,8 @@
+//Breadth-first search (BFS) is an algorithm for searching a tree data structure for a node that satisfies a given property.
+Note that BFS works here because it doesn’t consider a single path at once. It considers all the paths starting from the
+Note that BFS works here because it doesn’t consider a single path at once. It considers all the paths starting from the
+destination is visited, it is the shortest path.\\
+//To store matrix cell coordinates
 struct queue{
     int x;
     int y;
