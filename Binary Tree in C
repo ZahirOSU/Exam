@@ -150,6 +150,8 @@ Example: printLevelOrder(root);
 // Given a Binary Tree, print Right view of it. Right view of a Binary Tree is set of nodes visible when tree is visited from Right side. 
 The problem can be solved using simple recursive traversal. We can keep track of level of a node by passing a parameter to all recursive calls. 
 The idea is to keep track of maximum level also.
+And traverse the tree in a manner that right subtree is visited before left subtree. 
+Whenever we see a node whose level is more than maximum level so far, we print the node because this is the last node in its level.
 void rightViewUtil(struct Node *root, int level, int *max_level)
 {
     // Base Case
@@ -192,21 +194,21 @@ int findMaxUtil(Node* root, int &res)
     if (root == NULL)
         return 0;
  
-    // l and r store maximum path sum going through left and     // right child of root respectively
+    // l and r store maximum path sum going through left and  right child of root respectively
     int l = findMaxUtil(root->left,res);
     int r = findMaxUtil(root->right,res);
  
-    // Max path for parent call of root. This path must     // include at-most one child of root
+    // Max path for parent call of root. This path must include at-most one child of root
     int max_single = max(max(l, r) + root->data, root->data);
  
-    // Max Top represents the sum when the Node under     // consideration is the root of the maxsum path and no     // ancestors of root are there in max sum path
+    // Max Top represents the sum when the Node under  consideration is the root of the maxsum path and no   ancestors of root are there in max sum path
     int max_top = max(max_single, l + r + root->data);
      res = max(res, max_top); // Store the Maximum Result.
      return max_single;
 }
 
 //Sum of nodes in a Binary Search Tree with values from a given range
-// Function to perform level order // traversal on the Tree and // calculate the required sum
+// Function to perform level order // traversal on the Tree and  calculate the required sum
 // Approach: The given problem can be solved by performing any Tree Traversal and calculating the sum of nodes which are lying in the range [L, R].
 int rangeSumBST(Node* root, int low, int high)
 {
