@@ -12,14 +12,11 @@ void sortByPattern(string& str, string pat)
     // Create a count array store count of characters in str.
     int count[MAX_CHAR] = { 0 };
  
-    // Count number of occurrences of each character
-    // in str.
+    // Count number of occurrences of each character in str.
     for (int i = 0; i < str.length(); i++)
         count[str[i] - 'a']++;
  
-    // Traverse the pattern and print every characters
-    // same number of times as it appears in str. This
-    // loop takes O(m + n) time where m is length of
+// Traverse the pattern and print every characters same number of times as it appears in str. This loop takes O(m + n) time where m is length of
     // pattern and n is length of str.
     int index = 0;
     for (int i = 0; i < pat.length(); i++)
